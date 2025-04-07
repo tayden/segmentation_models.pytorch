@@ -22,6 +22,7 @@ from .timm_efficientnet import timm_efficientnet_encoders
 from .timm_sknet import timm_sknet_encoders
 from .mix_transformer import mix_transformer_encoders
 from .mobileone import mobileone_encoders
+from .mscan import mscan_encoders
 
 from .timm_universal import TimmUniversalEncoder
 from .timm_vit import TimmViTEncoder  # noqa F401
@@ -52,6 +53,7 @@ encoders.update(timm_efficientnet_encoders)
 encoders.update(timm_sknet_encoders)
 encoders.update(mix_transformer_encoders)
 encoders.update(mobileone_encoders)
+encoders.update(mscan_encoders)
 
 
 def is_equivalent_to_timm_universal(name):
