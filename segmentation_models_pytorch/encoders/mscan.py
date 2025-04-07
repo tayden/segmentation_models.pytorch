@@ -286,21 +286,22 @@ class DWConv(nn.Module):
 # ---------------------------------------------------------------
 
 
-class MSCAN_Encoder(MSCAN, EncoderMixin):
-    def __init__(self, out_channels: List[int], depth: int = 4, **kwargs):
+class MSCAN_Encoder(nn.Module, EncoderMixin):
+    def __init__(self, out_channels: List[int], depth: int, **kwargs):
+        super().__init__()
         self._depth = depth
         self._in_channels = 3
         self._out_channels = out_channels
 
-        super(MSCAN, self).__init__(
+        self.model = MSCAN(
             in_chans=self._in_channels,
             embed_dims=self._out_channels[1:],
-            num_stages=self.depth,
+            num_stages=self._depth - 1,
             **kwargs,
         )
 
     def forward(self, x: torch.Tensor) -> List[torch.Tensor]:
-        out = super(MSCAN, self).forward(x)
+        out = self.model.forward(x)
         return [x] + out
 
 
