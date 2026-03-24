@@ -15,6 +15,7 @@ from .decoders.pan import PAN
 from .decoders.upernet import UPerNet
 from .decoders.segformer import Segformer
 from .decoders.dpt import DPT
+from .decoders.eomt import EoMT
 from .base.hub_mixin import from_pretrained
 
 from .__version__ import __version__
@@ -36,6 +37,7 @@ _MODEL_ARCHITECTURES = [
     UPerNet,
     Segformer,
     DPT,
+    EoMT,
 ]
 MODEL_ARCHITECTURES_MAPPING = {a.__name__.lower(): a for a in _MODEL_ARCHITECTURES}
 
@@ -87,6 +89,7 @@ __all__ = [
     "UPerNet",
     "Segformer",
     "DPT",
+    "EoMT",
     "from_pretrained",
     "create_model",
     "__version__",
