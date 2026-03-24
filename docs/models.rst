@@ -96,3 +96,19 @@ DPT
     For some encoders, the model requires ``dynamic_img_size=True`` to be passed in order to work with resolutions different from what the encoder was trained for.
 
 .. autoclass:: segmentation_models_pytorch.DPT
+
+
+.. _eomt:
+
+EoMT
+~~~~
+
+.. note::
+
+    EoMT uses the same Vision Transformer encoders as DPT. See :ref:`dpt-encoders` for a full list of compatible timm encoders.
+
+.. note::
+
+    For some encoders, the model requires ``dynamic_img_size=True`` to be passed in order to work with resolutions different from what the encoder was trained for.
+
+.. autoclass:: segmentation_models_pytorch.EoMT
