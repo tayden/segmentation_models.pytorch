@@ -45,16 +45,17 @@ class UnetDecoderBlock(nn.Module):
         feature_map: torch.Tensor,
         target_height: int,
         target_width: int,
-        skip_connection: Optional[torch.Tensor] = None,
+        skip_connection: torch.Tensor,
     ) -> torch.Tensor:
         feature_map = F.interpolate(
             feature_map,
             size=(target_height, target_width),
             mode=self.interpolation_mode,
         )
-        if skip_connection is not None:
-            feature_map = torch.cat([feature_map, skip_connection], dim=1)
-            feature_map = self.attention1(feature_map)
+        # Unconditionally concatenate: when skip_channels=0 the skip tensor has
+        # zero channels, making cat a no-op — no data-dependent branch needed.
+        feature_map = torch.cat([feature_map, skip_connection], dim=1)
+        feature_map = self.attention1(feature_map)
         feature_map = self.conv1(feature_map)
         feature_map = self.conv2(feature_map)
         feature_map = self.attention2(feature_map)
@@ -164,7 +165,11 @@ class UnetDecoder(nn.Module):
         for i, decoder_block in enumerate(self.blocks):
             # upsample to the next spatial shape
             height, width = spatial_shapes[i + 1]
-            skip_connection = skip_connections[i] if i < len(skip_connections) else None
-            x = decoder_block(x, height, width, skip_connection=skip_connection)
+            if i < len(skip_connections):
+                skip_connection = skip_connections[i]
+            else:
+                # Zero-channel tensor: cat is a no-op, keeps forward pass branch-free
+                skip_connection = x.new_zeros(x.shape[0], 0, height, width)
+            x = decoder_block(x, height, width, skip_connection)
 
         return x
